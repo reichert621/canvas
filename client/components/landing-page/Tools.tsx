@@ -55,7 +55,7 @@ export const Tools = () => {
   return (
     <ToolsContainer my="2rem" mx="auto" px={[0, '2rem']}>
       <ImageContainer width={[0, 316]} p={2}>
-        <img style={{width: '100%'}} src="http://via.placeholder.com/300" />
+        <img style={{width: '100%'}} src="https://via.placeholder.com/300" />
       </ImageContainer>
       <Flex
         flexDirection="column"

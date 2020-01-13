@@ -110,7 +110,7 @@ const ReasonsImage = () => {
         <picture>
           <img
             alt="Reasons"
-            src="http://via.placeholder.com/540x680"
+            src="https://via.placeholder.com/540x680"
             role="presentation"
           />
         </picture>

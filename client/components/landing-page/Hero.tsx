@@ -92,23 +92,23 @@ export const Hero = () => {
   const providers = [
     {
       name: 'Option #1',
-      logo: 'http://via.placeholder.com/50',
+      logo: 'https://via.placeholder.com/50',
     },
     {
       name: 'Option #2',
-      logo: 'http://via.placeholder.com/50',
+      logo: 'https://via.placeholder.com/50',
     },
     {
       name: 'Option #3',
-      logo: 'http://via.placeholder.com/50',
+      logo: 'https://via.placeholder.com/50',
     },
     {
       name: 'Option #4',
-      logo: 'http://via.placeholder.com/50',
+      logo: 'https://via.placeholder.com/50',
     },
     {
       name: 'Option #5',
-      logo: 'http://via.placeholder.com/50',
+      logo: 'https://via.placeholder.com/50',
     },
   ];
 

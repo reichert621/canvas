@@ -136,7 +136,7 @@ export const OnboardingPage = () => {
         <Box p={4}>Side bar</Box>
       </SideBar>
       <FormContainer>
-        <Box px={5} py={4}>
+        <Box px={[3, 5]} py={4}>
           <OnboardingForm />
         </Box>
       </FormContainer>

@@ -1,0 +1,5 @@
+{
+  "watch": ["server"],
+  "ext": "ts",
+  "exec": "WATCH_MODE=1 TS_NODE_TRANSPILE_ONLY=true TS_NODE_FILES=true TS_NODE_PROJECT=server/tsconfig.json node -r ts-node/register ./server/index.ts"
+}

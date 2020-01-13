@@ -84,13 +84,6 @@ export const OnboardingForm = () => {
 
         <Box my={1} flex={1}>
           <Label htmlFor="email">Verify ID</Label>
-          <TextInput
-            id="id_verification"
-            name="id_verification"
-            type="text"
-            placeholder="Verify your ID"
-            mb={2}
-          />
           <Button width={1} type="default">
             Verify your identity
           </Button>
@@ -121,7 +114,7 @@ export const OnboardingForm = () => {
             mb={2}
           />
           <Button width={1} type="default">
-            Verify your identity
+            Verify your address
           </Button>
           <ErrorMessage errors={[]} visible={false} />
         </Box>

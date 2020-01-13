@@ -22,6 +22,7 @@ const FormContainer = styled(Flex)`
     background-color: #fff;
 
     @media (max-width: 720px) {
+      min-width: 0px;
       max-width: 100%;
     }
   }

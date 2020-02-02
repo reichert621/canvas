@@ -21,22 +21,40 @@ export const me = (req, res) => {
 
 export const login = async (req, res) => {
   const credentials = req.body;
-  const account = await Account.authenticate(credentials);
+  try {
+    const account = await Account.authenticate(credentials);
 
-  return res.json({account});
+    return res.json({account});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error logging in',
+    });
+  }
 };
 
 export const register = async (req, res) => {
   const credentials = req.body;
-  const account = await Account.register(credentials);
+  try {
+    const account = await Account.register(credentials);
 
-  return res.json({account});
+    return res.json({account});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error registering an account',
+    });
+  }
 };
 
 export const list = async (req, res) => {
-  const accounts = await Account.query();
+  try {
+    const accounts = await Account.query();
 
-  return res.json({accounts});
+    return res.json({accounts});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error retrieving accounts list',
+    });
+  }
 };
 
 export const logout = (req, res) => {

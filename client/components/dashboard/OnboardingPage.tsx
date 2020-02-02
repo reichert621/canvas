@@ -5,6 +5,7 @@ import {
   colors,
   Box,
   Button,
+  Card,
   DatePicker,
   Flex,
   Icon,
@@ -20,8 +21,8 @@ import {
 const SideBar = styled('div')`
   position: fixed;
   height: 100%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  // box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  // background-color: #fff;
   width: 240px;
 
   @media (max-width: 720px) {
@@ -31,13 +32,20 @@ const SideBar = styled('div')`
 `;
 
 const FormContainer = styled('div')`
-  max-width: 640px;
+  max-width: 720px;
   margin-left: 240px;
 
   @media (max-width: 720px) {
     max-width: 100%;
     margin-left: 0px;
   }
+`;
+
+const FormCard = styled(Card)`
+  border-radius: 0px 0px 2px 2px;
+  border-top: 3px solid ${colors.blue[3]};
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
+  background-color: ${colors.white};
 `;
 
 const ErrorMessage = ({
@@ -67,65 +75,82 @@ export const OnboardingForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box mb={3}>
-        <h3>Account Application</h3>
+    <FormCard p={4}>
+      <form onSubmit={handleSubmit}>
+        <Box mb={3}>
+          <h2>Account Application</h2>
 
-        <Box my={1} flex={1}>
-          <Label htmlFor="full_name">Full name</Label>
-          <TextInput
-            id="full_name"
-            name="full_name"
-            type="text"
-            placeholder="Alex McKenna"
-          />
-          <ErrorMessage errors={[]} visible={false} />
+          <Box my={1} flex={1}>
+            <Label htmlFor="full_name">Full name</Label>
+            <TextInput
+              id="full_name"
+              name="full_name"
+              type="text"
+              placeholder="Alex McKenna"
+              size="large"
+            />
+            <ErrorMessage errors={[]} visible={false} />
+          </Box>
+
+          <Box my={1} flex={1}>
+            <Label htmlFor="email">Verify your identity</Label>
+            <Button width={1} type="default" size="large">
+              Upload an ID document
+            </Button>
+            <ErrorMessage errors={[]} visible={false} />
+          </Box>
+
+          <Box my={1} flex={1}>
+            <Label htmlFor="address">Address</Label>
+            <TextInput
+              id="address"
+              name="address"
+              type="text"
+              placeholder="135 West 4th St."
+              size="large"
+              mb={2}
+            />
+            <TextInput
+              id="city"
+              name="city"
+              type="text"
+              placeholder="New York, NY"
+              size="large"
+              mb={2}
+            />
+            <TextInput
+              id="country"
+              name="country"
+              type="text"
+              placeholder="United States"
+              size="large"
+              mb={2}
+            />
+            <ErrorMessage errors={[]} visible={false} />
+          </Box>
+
+          <Box my={1} flex={1}>
+            <Label htmlFor="email">Verify your address</Label>
+            <Button width={1} type="default" size="large">
+              Upload an address document
+            </Button>
+            <ErrorMessage errors={[]} visible={false} />
+          </Box>
         </Box>
 
-        <Box my={1} flex={1}>
-          <Label htmlFor="email">Verify ID</Label>
-          <Button width={1} type="default">
-            Verify your identity
+        <Flex my={3}>
+          <Button
+            width={1}
+            px={4}
+            type="primary"
+            htmlType="submit"
+            size="large"
+          >
+            Submit
           </Button>
-          <ErrorMessage errors={[]} visible={false} />
-        </Box>
-
-        <Box my={1} flex={1}>
-          <Label htmlFor="address">Address</Label>
-          <TextInput
-            id="address"
-            name="address"
-            type="text"
-            placeholder="135 West 4th St."
-            mb={2}
-          />
-          <TextInput
-            id="city"
-            name="city"
-            type="text"
-            placeholder="New York, NY"
-            mb={2}
-          />
-          <TextInput
-            id="country"
-            name="country"
-            type="text"
-            placeholder="United States"
-            mb={2}
-          />
-          <Button width={1} type="default">
-            Verify your address
-          </Button>
-          <ErrorMessage errors={[]} visible={false} />
-        </Box>
-      </Box>
-
-      <Flex my={3}>
-        <Button px={4} type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Flex>
-    </form>
+        </Flex>
+      </form>
+    </FormCard>
   );
 };
 

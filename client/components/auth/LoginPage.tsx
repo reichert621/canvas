@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {RouteComponentProps, Link} from 'react-router-dom';
 import styled from 'styled-components';
+import first from 'lodash/first';
+import get from 'lodash/get';
 import {
   colors,
   Box,
@@ -12,12 +14,10 @@ import {
   Text,
   TextInput,
 } from '../Common';
-import {login} from '../../api/auth';
+import * as Auth from '../../api/auth';
 
 const FormContainer = styled(Flex)`
   && {
-    max-width: 540px;
-    min-width: 480px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     background-color: #fff;
 
@@ -36,10 +36,29 @@ const ValuePropsContainer = styled(Flex)`
   }
 `;
 
+const ErrorMessage = ({
+  errors,
+  visible,
+}: {
+  errors: Array<string>;
+  visible: boolean;
+}) => {
+  return (
+    <Text
+      style={{
+        visibility: errors.length && visible ? 'visible' : 'hidden',
+      }}
+      color={colors.red}
+    >
+      {first(errors) || <Text>&nbsp;</Text>}
+    </Text>
+  );
+};
+
 const ValueProps = () => {
   return (
-    <ValuePropsContainer flexDirection="column" px={[2, 4]} py={5} flex="2">
-      Value Props
+    <ValuePropsContainer flexDirection="column" px={[2, 4]} py={5} flex={1}>
+      {/* Value Props */}
     </ValuePropsContainer>
   );
 };
@@ -47,68 +66,90 @@ const ValueProps = () => {
 type FormProps = {onSubmit: () => void};
 
 const LoginForm = ({onSubmit}: FormProps) => {
+  const [submitAttempts, setSubmitAttempts] = React.useState(0);
+  const [serverError, setServerError] = React.useState(null);
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const credentials = {email, password};
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    login({email, password})
+    setSubmitAttempts(submitAttempts + 1);
+    // Clear the server error if one exists
+    setServerError(null);
+
+    Auth.login(credentials)
       .then(account => {
         console.log('Success!', account);
       })
       .then(() => onSubmit())
       .catch(err => {
         console.log('Error!', err);
+        const msg = get(err, 'response.body.message', 'Invalid credentials');
+        setServerError(msg);
       });
   };
 
   return (
-    <FormContainer
-      px={[4, 5]}
-      py={2}
-      flex="1"
-      flexDirection="column"
-      justifyContent="center"
-    >
-      <Heading mb={4} fontSize={40} fontWeight={400}>
-        Welcome back.
-      </Heading>
-      <form onSubmit={handleSubmit}>
-        <TextInput
-          mb={2}
-          size="large"
-          type="email"
-          placeholder="Email"
-          onChangeText={setEmail}
-        />
-        <TextInput
-          mb={2}
-          size="large"
-          type="password"
-          placeholder="Password"
-          onChangeText={setPassword}
-        />
-        <Button width={1} mt={3} size="large" type="primary" htmlType="submit">
-          Log in
-        </Button>
-      </form>
+    <FormContainer px={[4, 5]} py={2} flex={1}>
+      <Flex
+        style={{maxWidth: 384}}
+        width={1}
+        flexDirection="column"
+        justifyContent="center"
+      >
+        <Heading mb={3} fontSize={40} fontWeight={400}>
+          Welcome back.
+        </Heading>
+        <form onSubmit={handleSubmit}>
+          <Box mb={2}>
+            <Label htmlFor="email">Email</Label>
+            <TextInput
+              id="email"
+              size="large"
+              type="email"
+              onChangeText={setEmail}
+            />
+          </Box>
 
-      <Box mt={4}>
-        <Text>
-          Don't have an account? <Link to="register">Sign up!</Link>
-        </Text>
-      </Box>
+          <Box mb={2}>
+            <Label htmlFor="password">Password</Label>
+            <TextInput
+              id="password"
+              size="large"
+              type="password"
+              onChangeText={setPassword}
+            />
+          </Box>
+
+          <Box mt={3}>
+            <Button width={1} size="large" type="primary" htmlType="submit">
+              Log in
+            </Button>
+          </Box>
+          <Box mt={2}>
+            <ErrorMessage errors={[serverError]} visible={submitAttempts > 0} />
+          </Box>
+        </form>
+
+        <Box mt={3}>
+          <Text>
+            Don't have an account? <Link to="register">Sign up!</Link>
+          </Text>
+        </Box>
+      </Flex>
     </FormContainer>
   );
 };
 
-const LoginPage = ({history}: RouteComponentProps) => {
+export const LoginPage = ({history}: RouteComponentProps) => {
   // TODO: make sure fills whole height!
   return (
-    <Flex style={{minHeight: '100%'}}>
-      <LoginForm onSubmit={() => history.push('/onboarding')} />
+    <Flex flex={1}>
       <ValueProps />
+      <LoginForm onSubmit={() => history.push('/onboarding')} />
     </Flex>
   );
 };

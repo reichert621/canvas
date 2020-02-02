@@ -5,6 +5,7 @@ import {
   colors,
   Box,
   Button,
+  Card,
   DatePicker,
   Flex,
   Icon,
@@ -20,8 +21,8 @@ import * as Assets from '../../api/assets';
 const SideBar = styled('div')`
   position: fixed;
   height: 100%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  // box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  // background-color: #fff;
   width: 240px;
 
   @media (max-width: 720px) {
@@ -31,13 +32,20 @@ const SideBar = styled('div')`
 `;
 
 const FormContainer = styled('div')`
-  max-width: 640px;
+  max-width: 720px;
   margin-left: 240px;
 
   @media (max-width: 720px) {
     max-width: 100%;
     margin-left: 0px;
   }
+`;
+
+const FormCard = styled(Card)`
+  border-radius: 0px 0px 2px 2px;
+  border-top: 3px solid ${colors.blue[3]};
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
+  background-color: ${colors.white};
 `;
 
 const ErrorMessage = ({
@@ -83,66 +91,76 @@ export const OnboardingForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box mb={3}>
-        <h3>Create an asset</h3>
+    <FormCard p={4}>
+      <form onSubmit={handleSubmit}>
+        <Box mb={3}>
+          <h2>Register an asset</h2>
 
-        <Flex mx={-1}>
-          <Box m={1} flex={1}>
-            <Label htmlFor="value">Value in USD</Label>
-            <NumberInput
-              style={{width: '100%'}}
-              id="value"
-              name="value"
-              placeholder="1000"
-              value={assetValue}
-              onChange={setAssetValue}
+          <Flex mx={-1}>
+            <Box m={1} flex={1}>
+              <Label htmlFor="value">Value in USD</Label>
+              <NumberInput
+                style={{width: '100%'}}
+                id="value"
+                name="value"
+                placeholder="1000"
+                size="large"
+                value={assetValue}
+                onChange={setAssetValue}
+              />
+              <ErrorMessage errors={[]} visible={false} />
+            </Box>
+
+            <Box m={1} flex={1}>
+              <Label htmlFor="date_of_purchase">Date of purchase</Label>
+              <DatePicker
+                style={{width: '100%'}}
+                id="date_of_purchase"
+                name="date_of_purchase"
+                size="large"
+                value={purchaseDate}
+                allowClear={false}
+                onChange={setPurchaseDate}
+              />
+              <ErrorMessage errors={[]} visible={false} />
+            </Box>
+          </Flex>
+
+          <Box my={1} flex={1}>
+            <Label htmlFor="description">Description</Label>
+            <TextInput
+              id="description"
+              name="description"
+              placeholder="Rolex watch"
+              size="large"
+              value={description}
+              onChangeText={setDescription}
             />
             <ErrorMessage errors={[]} visible={false} />
           </Box>
 
-          <Box m={1} flex={1}>
-            <Label htmlFor="date_of_purchase">Date of purchase</Label>
-            <DatePicker
-              style={{width: '100%'}}
-              id="date_of_purchase"
-              name="date_of_purchase"
-              value={purchaseDate}
-              allowClear={false}
-              onChange={setPurchaseDate}
-            />
+          <Box my={1} flex={1}>
+            <Label htmlFor="invoice">Invoice</Label>
+            <Button width={1} type="default" size="large">
+              Upload the invoice for your asset
+            </Button>
             <ErrorMessage errors={[]} visible={false} />
           </Box>
-        </Flex>
-
-        <Box my={1} flex={1}>
-          <Label htmlFor="description">Description</Label>
-          <TextArea
-            id="description"
-            name="description"
-            placeholder="Rolex watch"
-            autoSize={{minRows: 2, maxRows: 4}}
-            value={description}
-            onChangeText={setDescription}
-          />
-          <ErrorMessage errors={[]} visible={false} />
         </Box>
 
-        <Box my={1} flex={1}>
-          <Label htmlFor="invoice">Invoice</Label>
-          <Button width={1} type="default">
-            Upload the invoice for your asset
+        <Flex my={3}>
+          <Button
+            width={1}
+            px={4}
+            type="primary"
+            size="large"
+            htmlType="submit"
+          >
+            Submit
           </Button>
-          <ErrorMessage errors={[]} visible={false} />
-        </Box>
-      </Box>
-
-      <Flex my={3}>
-        <Button px={4} type="primary" htmlType="submit">
-          Create
-        </Button>
-      </Flex>
-    </form>
+        </Flex>
+      </form>
+    </FormCard>
   );
 };
 

@@ -1,3 +1,4 @@
-import * as Account from './account';
+import Account from './account';
+import Asset from './asset';
 
-export {Account};
+export {Account, Asset};

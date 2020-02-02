@@ -25,7 +25,6 @@ export const fetchCurrentUser = async (): Promise<any> => {
 };
 
 export const login = async (credentials: Credentials): Promise<any> => {
-  console.log('Logging in?', credentials);
   return request
     .post('/api/login')
     .send(credentials)

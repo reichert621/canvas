@@ -1,16 +1,16 @@
-const {Account} = require('../models');
+import {Account} from '../models';
 
 export const isAuthenticated = (req, res) => {
   const isLoggedIn = Boolean(req.user && req.user.id);
 
   return res.json({
-    is_authenticaed: isLoggedIn,
+    is_authenticated: isLoggedIn,
     account: req.user,
   });
 };
 
 export const me = (req, res) => {
-  const {user} = req;
+  const {user} = req; // TODO: rename to req.account?
 
   if (!user || !user.id) {
     return res.status(401).send({status: 401, error: 'Not authenticated.'});
@@ -34,7 +34,7 @@ export const register = async (req, res) => {
 };
 
 export const list = async (req, res) => {
-  const accounts = await Account.fetch();
+  const accounts = await Account.query();
 
   return res.json({accounts});
 };

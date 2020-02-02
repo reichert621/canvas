@@ -15,8 +15,8 @@ import {
   Text,
   TextArea,
   TextInput,
-  Timeline,
 } from '../Common';
+import * as Assets from '../../api/assets';
 
 const SideBar = styled('div')`
   position: fixed;
@@ -70,69 +70,79 @@ const ErrorMessage = ({
 };
 
 export const OnboardingForm = () => {
+  const [assetValue, setAssetValue] = React.useState(null);
+  const [purchaseDate, setPurchaseDate] = React.useState(null);
+  const [description, setDescription] = React.useState('');
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    console.log({
+      description,
+      value: assetValue,
+      purchased_at: purchaseDate,
+    });
+    Assets.create({
+      description,
+      value: assetValue,
+      purchased_at: purchaseDate,
+    })
+      .then(result => console.log('Success!', result))
+      .catch(err => console.log('Error!', err));
   };
 
   return (
     <FormCard p={4}>
       <form onSubmit={handleSubmit}>
         <Box mb={3}>
-          <h2>Account Application</h2>
+          <h2>Register an asset</h2>
+
+          <Flex mx={-1}>
+            <Box m={1} flex={1}>
+              <Label htmlFor="value">Value in USD</Label>
+              <NumberInput
+                style={{width: '100%'}}
+                id="value"
+                name="value"
+                placeholder="1000"
+                size="large"
+                value={assetValue}
+                onChange={setAssetValue}
+              />
+              <ErrorMessage errors={[]} visible={false} />
+            </Box>
+
+            <Box m={1} flex={1}>
+              <Label htmlFor="date_of_purchase">Date of purchase</Label>
+              <DatePicker
+                style={{width: '100%'}}
+                id="date_of_purchase"
+                name="date_of_purchase"
+                size="large"
+                value={purchaseDate}
+                allowClear={false}
+                onChange={setPurchaseDate}
+              />
+              <ErrorMessage errors={[]} visible={false} />
+            </Box>
+          </Flex>
 
           <Box my={1} flex={1}>
-            <Label htmlFor="full_name">Full name</Label>
+            <Label htmlFor="description">Description</Label>
             <TextInput
-              id="full_name"
-              name="full_name"
-              type="text"
-              placeholder="Alex McKenna"
+              id="description"
+              name="description"
+              placeholder="Rolex watch"
               size="large"
+              value={description}
+              onChangeText={setDescription}
             />
             <ErrorMessage errors={[]} visible={false} />
           </Box>
 
           <Box my={1} flex={1}>
-            <Label htmlFor="email">Verify your identity</Label>
+            <Label htmlFor="invoice">Invoice</Label>
             <Button width={1} type="default" size="large">
-              Upload an ID document
-            </Button>
-            <ErrorMessage errors={[]} visible={false} />
-          </Box>
-
-          <Box my={1} flex={1}>
-            <Label htmlFor="address">Address</Label>
-            <TextInput
-              id="address"
-              name="address"
-              type="text"
-              placeholder="135 West 4th St."
-              size="large"
-              mb={2}
-            />
-            <TextInput
-              id="city"
-              name="city"
-              type="text"
-              placeholder="New York, NY"
-              size="large"
-              mb={2}
-            />
-            <TextInput
-              id="country"
-              name="country"
-              type="text"
-              placeholder="United States"
-              size="large"
-              mb={2}
-            />
-            <ErrorMessage errors={[]} visible={false} />
-          </Box>
-
-          <Box my={1} flex={1}>
-            <Label htmlFor="email">Verify your address</Label>
-            <Button width={1} type="default" size="large">
-              Upload an address document
+              Upload the invoice for your asset
             </Button>
             <ErrorMessage errors={[]} visible={false} />
           </Box>
@@ -143,8 +153,8 @@ export const OnboardingForm = () => {
             width={1}
             px={4}
             type="primary"
-            htmlType="submit"
             size="large"
+            htmlType="submit"
           >
             Submit
           </Button>

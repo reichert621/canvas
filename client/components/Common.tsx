@@ -14,7 +14,7 @@ import {
   WidthProps,
 } from 'styled-system';
 import {Box, Flex, Card, Image, Heading, Text} from 'rebass';
-import {blue, green, red, gold} from '@ant-design/colors';
+import {blue, green, red, gold, grey} from '@ant-design/colors';
 import BaseAutoComplete, {AutoCompleteProps} from 'antd/lib/auto-complete';
 import BaseCheckbox, {CheckboxProps} from 'antd/lib/checkbox';
 import BaseInput, {InputProps} from 'antd/lib/input/Input';
@@ -59,6 +59,8 @@ export const colors = {
   green: green[5] || '#52c41a',
   red: red[5] || '#f5222d',
   gold: gold[5] || '#faad14',
+  blue: blue, // expose all blues
+  gray: grey, // expose all grays
 };
 
 const {Item: MenuItem, Divider: MenuDivider} = Menu;
@@ -95,9 +97,10 @@ export const TextArea = ({
 
 export const Label = styled('label')`
   display: inline-block;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   margin-bottom: 4px;
+  letter-spacing: 0.6px;
 `;
 
 export const AutoComplete = BaseAutoComplete;

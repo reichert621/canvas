@@ -1,16 +1,16 @@
-const {Account} = require('../models');
+import {Account} from '../models';
 
 export const isAuthenticated = (req, res) => {
   const isLoggedIn = Boolean(req.user && req.user.id);
 
   return res.json({
-    is_authenticaed: isLoggedIn,
+    is_authenticated: isLoggedIn,
     account: req.user,
   });
 };
 
 export const me = (req, res) => {
-  const {user} = req;
+  const {user} = req; // TODO: rename to req.account?
 
   if (!user || !user.id) {
     return res.status(401).send({status: 401, error: 'Not authenticated.'});
@@ -21,22 +21,40 @@ export const me = (req, res) => {
 
 export const login = async (req, res) => {
   const credentials = req.body;
-  const account = await Account.authenticate(credentials);
+  try {
+    const account = await Account.authenticate(credentials);
 
-  return res.json({account});
+    return res.json({account});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error logging in',
+    });
+  }
 };
 
 export const register = async (req, res) => {
   const credentials = req.body;
-  const account = await Account.register(credentials);
+  try {
+    const account = await Account.register(credentials);
 
-  return res.json({account});
+    return res.json({account});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error registering an account',
+    });
+  }
 };
 
 export const list = async (req, res) => {
-  const accounts = await Account.fetch();
+  try {
+    const accounts = await Account.query();
 
-  return res.json({accounts});
+    return res.json({accounts});
+  } catch (err) {
+    return res.status(500).send({
+      error: err.message || 'Error retrieving accounts list',
+    });
+  }
 };
 
 export const logout = (req, res) => {

@@ -1,115 +1,126 @@
-import * as crypto from 'crypto';
-import {first, omit} from 'lodash';
-import knex from '../knex';
-
-export type Schema = {
-  id: number;
-  email: string;
-  salt: string;
-  password: string;
-};
+import {Model} from 'objection';
+import {omit} from 'lodash';
+import crypto from 'crypto';
+import Asset from './asset';
 
 export type Credentials = {
   email?: string;
   password?: string;
 };
 
-const Model = () => knex('accounts');
+export default class Account extends Model {
+  id!: number;
+  email!: string;
+  password!: string;
+  salt!: string;
+  full_name!: string;
+  country!: string;
 
-const makeSalt = (num = 20) => {
-  return crypto.randomBytes(num).toString('hex');
-};
+  static tableName = 'accounts';
 
-const getHashed = (password: string, salt: string) => {
-  return crypto
-    .createHmac('sha512', salt)
-    .update(password)
-    .digest('hex');
-};
+  static jsonSchema = {
+    type: 'object',
+    required: ['email', 'password'],
 
-const verifyPassword = (password: string, salt: string, hashed: string) => {
-  return getHashed(password, salt) === hashed;
-};
+    properties: {
+      id: {type: 'integer'},
+      email: {type: 'string', minLength: 1, maxLength: 255},
+      password: {type: 'string', minLength: 1, maxLength: 255},
+      full_name: {type: 'string', minLength: 1, maxLength: 255},
+      country: {type: 'string', minLength: 1, maxLength: 255},
+    },
+  };
 
-const isValidUser = (user: Schema, password: string) => {
-  if (!user) throw new Error(`Invalid user ${user}!`);
+  static relationMappings = {
+    assets: {
+      relation: Model.HasManyRelation,
+      modelClass: Asset,
+      join: {
+        from: 'accounts.id',
+        to: 'assets.account_id',
+      },
+    },
+  };
 
-  const {salt, password: hashed} = user;
-  const isValid = verifyPassword(password, salt, hashed);
+  // Test $beforeInsert hook for making salt?
 
-  return isValid;
-};
+  static makeSalt = (num = 20) => {
+    return crypto.randomBytes(num).toString('hex');
+  };
 
-export const verifyUser = (user: Schema, password: string) => {
-  if (isValidUser(user, password)) {
-    return user;
-  } else {
-    throw new Error('Invalid password!');
-  }
-};
+  static getHashed = (password: string, salt: string) => {
+    return crypto
+      .createHmac('sha512', salt)
+      .update(password)
+      .digest('hex');
+  };
 
-export const formatted = (user: Schema) => omit(user, ['password', 'salt']);
+  static verifyPassword = (password: string, salt: string, hashed: string) => {
+    return Account.getHashed(password, salt) === hashed;
+  };
 
-const sanitized = (params: any) => {
-  const {password} = params;
-  const salt = makeSalt();
+  static isValidAccount = (account: Account, password: string) => {
+    if (!account) throw new Error(`Invalid account ${account}!`);
 
-  return Object.assign({}, params, {
-    salt,
-    password: getHashed(password, salt),
-  });
-};
+    const {salt, password: hashed} = account;
+    const isValid = Account.verifyPassword(password, salt, hashed);
 
-export const fetch = (where: any = {}) => {
-  return Model()
-    .select()
-    .where(where);
-};
+    return isValid;
+  };
 
-export const findOne = (where: any = {}) => {
-  return fetch(where).first();
-};
+  static hashPasswordWithSalt = (params: any) => {
+    const {password} = params;
+    const salt = Account.makeSalt();
 
-export const findById = (id: number) => {
-  return findOne({id});
-};
-
-export const findByEmail = (email: string) => {
-  return findOne({email}).then(user => user);
-};
-
-export const create = (params: any) => {
-  return Model()
-    .returning('id')
-    .insert(sanitized(params))
-    .then(ids => first(ids))
-    .then(id => {
-      if (!id) {
-        throw new Error(`Failed to insert with params: ${params}`);
-      } else {
-        return findById(id);
-      }
+    return Object.assign({}, params, {
+      salt,
+      password: Account.getHashed(password, salt),
     });
-};
+  };
 
-export const register = async ({email, password}: Credentials) => {
-  if (!email) throw new Error('Email is required!');
-  if (!password) throw new Error('Password is required!');
+  static findByEmail = (email: string) => {
+    return Account.query().findOne({email});
+  };
 
-  return findByEmail(email)
-    .then(existing => {
-      if (existing) throw new Error('That email address is taken!');
+  // TODO: see if something similar is built into Objection
+  // Test out $afterFind to see if that will work?
+  static formatted = (account: Account) => {
+    return omit(account, ['password', 'salt']);
+  };
 
-      return create({email, password});
-    })
-    .then(user => formatted(user));
-};
+  static verify = (account: Account, password: string) => {
+    if (Account.isValidAccount(account, password)) {
+      return account;
+    } else {
+      throw new Error('Invalid password!');
+    }
+  };
 
-export const authenticate = async ({email, password}: Credentials) => {
-  if (!email) throw new Error('Email is required!');
-  if (!password) throw new Error('Password is required!');
+  static create = params => {
+    const account = Account.hashPasswordWithSalt(params);
 
-  return findByEmail(email)
-    .then(user => verifyUser(user, password))
-    .then(user => formatted(user));
-};
+    return Account.query().insert(account);
+  };
+
+  static register = async ({email, password}: Credentials) => {
+    if (!email) throw new Error('Email is required!');
+    if (!password) throw new Error('Password is required!');
+
+    return Account.findByEmail(email)
+      .then(existing => {
+        if (existing) throw new Error('That email address is taken!');
+
+        return Account.create({email, password});
+      })
+      .then(account => Account.formatted(account));
+  };
+
+  static authenticate = async ({email, password}: Credentials) => {
+    if (!email) throw new Error('Email is required!');
+    if (!password) throw new Error('Password is required!');
+
+    return Account.findByEmail(email)
+      .then(account => Account.verify(account, password))
+      .then(account => Account.formatted(account));
+  };
+}

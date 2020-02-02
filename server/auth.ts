@@ -9,7 +9,7 @@ const verify: VerifyFunction = async (email, password, cb) => {
   return Account.findByEmail(email)
     .then(account => {
       if (!account) return cb(null, false);
-      if (!Account.verifyUser(account, password)) {
+      if (!Account.verify(account, password)) {
         return cb(null, false);
       }
 
@@ -21,17 +21,18 @@ const verify: VerifyFunction = async (email, password, cb) => {
 export const strategy = new Strategy({usernameField: 'email'}, verify);
 
 export const serialize = (
-  account: Account.Schema,
+  account: Account,
   done: (err: any, id?: number) => void
 ) => {
   return done(null, account.id);
 };
 
-export const deserialize = (
+export const deserialize = async (
   id: number,
-  done: (err: any, account?: Account.Schema) => void
+  done: (err: any, account?: Account) => void
 ) => {
-  return Account.findById(id)
+  return Account.query()
+    .findById(id)
     .then(account => done(null, account))
     .catch(err => done(err));
 };

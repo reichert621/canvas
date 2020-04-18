@@ -56,7 +56,7 @@ export const Nav = () => {
           justifyContent="space-between"
         >
           <Link to="/home">
-            <Image src="assets/logo.svg" style={{height: 40, width: 40}} />
+            <Image src="assets/logo-v2.svg" style={{height: 40, width: 40}} />
           </Link>
 
           <Box />

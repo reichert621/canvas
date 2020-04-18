@@ -71,7 +71,7 @@ export const Products = () => {
           type="default"
           size="large"
           mr={3}
-          href="mailto:reichertjalex@gmail.com"
+          href="mailto:daniel.burke11@gmail.com"
         >
           Contact us
         </Button>

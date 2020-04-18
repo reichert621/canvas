@@ -1,28 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import {colors, Box, Card, Heading, Flex} from '../Common';
+import {motion} from 'framer-motion';
+import {colors, Box, Button, Card, Image, Flex, Text} from '../Common';
+import GoogleFormModal from './GoogleFormModal';
 
 const HeroContainer = styled(Flex)`
-  background-color: #f4faff;
+  background-color: #fff;
   min-height: 420px;
-  padding-top: 96px;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 0 1rem;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+`;
 
-  @media (max-width: 768px) {
-    min-height: 320px;
-    padding-top: 64px;
-  }
+const HeroIntro = styled('p')`
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.1em;
+  font-weight: 400;
 `;
 
 const HeroHeading = styled('h1')`
   font-weight: 400;
-  font-size: 3.3rem;
+  font-size: 3rem;
+  line-height: 1.2;
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 
   @media (max-width: 768px) {
     font-size: 2.4rem;
@@ -31,9 +34,8 @@ const HeroHeading = styled('h1')`
 `;
 
 const HeroSubtitle = styled('p')`
-  font-size: 1.5rem;
-  line-height: 1.33;
-  max-width: 800px;
+  font-size: 1.4rem;
+  line-height: 1.4;
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
@@ -41,107 +43,95 @@ const HeroSubtitle = styled('p')`
   }
 `;
 
-const HeroSubheader = styled('h4')`
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-`;
-
-const CarriersContainer = styled(Flex)`
-  // NB: This is just a hack to increase specificity
-  && {
-    @media (max-width: 768px) {
-      display: none;
-    }
+const ImageContainer = styled(Box)`
+  @media (max-width: 880px) {
+    display: none;
   }
 `;
 
-const ProviderCard = styled('div')`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 0.125rem;
-  box-shadow: 0 4px 8px 0 rgba(108, 127, 135, 0.1),
-    0 1px 4px 0 rgba(108, 127, 135, 0.36);
-  margin-right: 1rem;
-  height: 160px;
-  width: 160px;
-`;
-
-const ProviderLogo = styled('img')`
-  border-radius: 50%;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  width: 56px;
-  height: 56px;
-`;
-
-const CarrierLabel = styled('p')`
-  font-size: 0.8125rem;
-  line-height: 1.5384615384615385;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.0625em;
-`;
-
 export const Hero = () => {
-  // TODO: don't rely on these logo urls
-  const providers = [
-    {
-      name: 'Option #1',
-      logo: 'https://via.placeholder.com/50',
-    },
-    {
-      name: 'Option #2',
-      logo: 'https://via.placeholder.com/50',
-    },
-    {
-      name: 'Option #3',
-      logo: 'https://via.placeholder.com/50',
-    },
-    {
-      name: 'Option #4',
-      logo: 'https://via.placeholder.com/50',
-    },
-    {
-      name: 'Option #5',
-      logo: 'https://via.placeholder.com/50',
-    },
-  ];
+  const [isModalOpen, setModalOpen] = React.useState(false);
+
+  const openGoogleFormModal = () => setModalOpen(true);
+  const closeGoogleFormModal = () => setModalOpen(false);
 
   return (
-    <Box>
-      <HeroContainer>
-        <Box>
-          <HeroHeading>Main heading goes here.</HeroHeading>
-          <HeroSubtitle>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim.
-          </HeroSubtitle>
+    <HeroContainer mb={4}>
+      <Box
+        width={1}
+        style={{
+          backgroundColor: '#f8f8f8',
+          borderRadius: 4,
+        }}
+      >
+        <Box
+          style={{maxWidth: 920, margin: '0 auto', textAlign: 'center'}}
+          width={1}
+          px={4}
+          pt={5}
+          pb={[4, 5]}
+        >
+          <Box mb={3}>
+            <motion.div
+              initial={{opacity: 0, y: -8}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.6, ease: 'easeOut'}}
+            >
+              <HeroIntro>Introducing SovPort</HeroIntro>
+            </motion.div>
+          </Box>
+
+          <motion.div
+            initial={{opacity: 0, y: -8}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.6, ease: 'easeOut'}}
+          >
+            <HeroHeading>
+              The safety deposit box platform for the sovereign individual.
+            </HeroHeading>
+          </motion.div>
+
+          <motion.div
+            initial={{opacity: 0, y: -8}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.6, ease: 'easeOut', delay: 0.6}}
+          >
+            <Box mb={4} style={{maxWidth: 800, margin: '0 auto'}}>
+              <HeroSubtitle>
+                Remotely execute the opening of a safety deposit box in one of
+                the world's leading financial hubs. Confidently manage your
+                physical assets from anywhere in the world with a web based
+                platform.
+              </HeroSubtitle>
+            </Box>
+          </motion.div>
+          <motion.div
+            initial={{opacity: 0, y: -8}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.6, ease: 'easeOut', delay: 1.2}}
+          >
+            <Box mb={4}>
+              <a href="mailto:daniel.burke11@gmail.com">
+                <Button size="large" type="default" mx={1} width={160}>
+                  Contact us
+                </Button>
+              </a>
+              <Button
+                size="large"
+                type="primary"
+                icon="arrow-right"
+                mx={1}
+                width={160}
+                onClick={openGoogleFormModal}
+              >
+                Start now
+              </Button>
+            </Box>
+          </motion.div>
         </Box>
-      </HeroContainer>
-      <CarriersContainer flexDirection="column" alignItems="center" mt={-136}>
-        <HeroSubheader>
-          Get services from our network of providers
-        </HeroSubheader>
-        <Flex>
-          {providers.map(({name, logo}) => {
-            return (
-              <ProviderCard key={name}>
-                <Box p="0.25rem" mt="0.25rem">
-                  <ProviderLogo src={logo} />
-                </Box>
-                <CarrierLabel>{name}</CarrierLabel>
-              </ProviderCard>
-            );
-          })}
-        </Flex>
-      </CarriersContainer>
-    </Box>
+      </Box>
+      <GoogleFormModal visible={isModalOpen} onCancel={closeGoogleFormModal} />
+    </HeroContainer>
   );
 };
 

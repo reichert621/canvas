@@ -69,7 +69,7 @@ const ErrorMessage = ({
   );
 };
 
-export const OnboardingForm = () => {
+export const CreateAssetForm = () => {
   const [assetValue, setAssetValue] = React.useState(null);
   const [purchaseDate, setPurchaseDate] = React.useState(null);
   const [description, setDescription] = React.useState('');
@@ -164,7 +164,7 @@ export const OnboardingForm = () => {
   );
 };
 
-export const OnboardingPage = () => {
+export const CreateAssetPage = () => {
   return (
     <Box>
       <SideBar>
@@ -172,11 +172,11 @@ export const OnboardingPage = () => {
       </SideBar>
       <FormContainer>
         <Box px={[3, 5]} py={4}>
-          <OnboardingForm />
+          <CreateAssetForm />
         </Box>
       </FormContainer>
     </Box>
   );
 };
 
-export default OnboardingPage;
+export default CreateAssetPage;

@@ -23,6 +23,7 @@ import BaseTextArea, {TextAreaProps} from 'antd/lib/input/TextArea';
 import BaseButton, {ButtonProps} from 'antd/lib/button';
 import BaseIcon, {IconProps} from 'antd/lib/icon';
 import BaseDivider, {DividerProps} from 'antd/lib/divider';
+import BaseTag, {TagProps} from 'antd/lib/tag';
 import Alert from 'antd/lib/alert';
 import Avatar from 'antd/lib/avatar';
 import Badge from 'antd/lib/badge';
@@ -30,6 +31,7 @@ import DatePicker from 'antd/lib/date-picker';
 import Descriptions from 'antd/lib/descriptions';
 import Dropdown from 'antd/lib/dropdown';
 import Menu from 'antd/lib/menu';
+import Modal from 'antd/lib/modal';
 import notification from 'antd/lib/notification';
 import Popconfirm from 'antd/lib/popconfirm';
 import Popover from 'antd/lib/popover';
@@ -38,9 +40,10 @@ import Radio from 'antd/lib/radio';
 import Result from 'antd/lib/result';
 import Select from 'antd/lib/select';
 import Spin from 'antd/lib/spin';
-import Tag from 'antd/lib/tag';
+import Table from 'antd/lib/table';
 import Timeline from 'antd/lib/timeline';
 import Tooltip from 'antd/lib/tooltip';
+import Upload from 'antd/lib/upload';
 
 /**
  * This file mainly just handles wrapping antd (Ant Design) components with
@@ -97,10 +100,10 @@ export const TextArea = ({
 
 export const Label = styled('label')`
   display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   margin-bottom: 4px;
-  letter-spacing: 0.6px;
+  ${color}
 `;
 
 export const AutoComplete = BaseAutoComplete;
@@ -201,6 +204,15 @@ export const Divider = styled((props: DividerProps & SpaceProps) => (
   }
 `;
 
+export const Tag = styled((props: TagProps & SpaceProps) => (
+  <BaseTag {...props} />
+))`
+  // NB: This is just a hack to increase specificity
+  && {
+    ${space}
+  }
+`;
+
 export const Icon = styled((props: IconProps & SpaceProps) => (
   <BaseIcon {...props} />
 ))`
@@ -229,6 +241,7 @@ export {
   Menu,
   MenuItem,
   MenuDivider,
+  Modal,
   notification,
   Popconfirm,
   Popover,
@@ -238,7 +251,8 @@ export {
   Select,
   SelectOption,
   Spin,
-  Tag,
+  Table,
   Timeline,
   Tooltip,
+  Upload,
 };

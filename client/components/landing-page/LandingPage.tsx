@@ -15,16 +15,17 @@ const Footer = styled(Box)`
 
 export const LandingPage = (props: RouteComponentProps) => {
   return (
-    <Box bg="#fff">
+    <Flex bg="#fff" flexDirection="column" flex={1}>
       <Nav />
 
-      <section>
+      <section style={{flex: 1}}>
         <Hero />
       </section>
+
       <footer>
         <Footer p={4}>© 2020 SovPort, Inc. All Rights Reserved</Footer>
       </footer>
-    </Box>
+    </Flex>
   );
 };
 

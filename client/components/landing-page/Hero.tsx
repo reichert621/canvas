@@ -6,6 +6,7 @@ import GoogleFormModal from './GoogleFormModal';
 
 const HeroContainer = styled(Flex)`
   background-color: #fff;
+  border-radius: 4px;
   min-height: 420px;
   padding: 0 1rem;
   flex-direction: column;

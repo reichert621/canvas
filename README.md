@@ -1,6 +1,6 @@
-# Canvas
+# Sovport
 
-Prototype for Canvas app.
+Prototype for Sovport app.
 
 ## Getting Started
 
